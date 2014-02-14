@@ -2,6 +2,8 @@
 	namespace DataFX;
 	use WebFX\System;
 	
+	\Enum::Create("DataFX\\ColumnValue", "Now", "Today", "Undefined");
+	
 	class DataFX
 	{
 		public static $Errors;
@@ -26,6 +28,9 @@
 			}
 			
 			require_once("Column.inc.php");
+			require_once("DatabaseOperationResult.inc.php");
+			require_once("Record.inc.php");
+			require_once("RecordColumn.inc.php");
 			require_once("Table.inc.php");
 			return true;
 		}
@@ -36,11 +41,13 @@
 	{
 		public $Code;
 		public $Message;
+		public $Query;
 		
-		public function __construct($code, $message)
+		public function __construct($code, $message, $query = null)
 		{
 			$this->Code = $code;
 			$this->Message = $message;
+			$this->Query = $query;
 		}
 	}
 	class DataFXErrorCollection
