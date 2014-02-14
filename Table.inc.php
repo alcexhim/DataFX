@@ -19,8 +19,10 @@
 			$query = "CREATE TABLE " . System::$Configuration["Database.TablePrefix"] . $this->Name;
 			
 			$query .= "(";
-			foreach ($this->Columns as $column)
+			$count = count($this->Columns);
+			for ($i = 0; $i < $count; $i++)
 			{
+				$column = $this->Columns[$i];
 				$query .= $column->Name . " " . $column->DataType;
 				if ($column->Size != null)
 				{
@@ -30,6 +32,7 @@
 				{
 					$query .= " DEFAULT " . $column->DefaultValue;
 				}
+				if ($i < $count - 1) $query .= ", ";
 			}
 			$query .= ")";
 			echo($query);
