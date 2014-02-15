@@ -7,12 +7,14 @@
 		public $Name;
 		public $ColumnPrefix;
 		public $Columns;
+		public $Records;
 		
-		public function __construct($name, $columnPrefix, $columns)
+		public function __construct($name, $columnPrefix, $columns, $records)
 		{
 			$this->Name = $name;
 			$this->ColumnPrefix = $columnPrefix;
 			$this->Columns = $columns;
+			$this->Records = $records;
 		}
 		
 		public static function Get($name, $columnPrefix = null)
@@ -80,7 +82,6 @@
 				if ($i < $count - 1) $query .= ", ";
 			}
 			$query .= ")";
-			echo($query);
 			
 			$result = $MySQL->query($query);
 			if ($result === false)
@@ -89,6 +90,10 @@
 				DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
 				return false;
 			}
+			
+			$result = $this->Insert($this->Records);
+			if ($result == null) return false;
+			
 			return true;
 		}
 		public function Insert($records, $stopOnError = true)

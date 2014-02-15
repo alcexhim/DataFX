@@ -4,6 +4,8 @@
 	
 	\Enum::Create("DataFX\\ColumnValue", "Now", "Today", "Undefined");
 	
+	require_once("DataObject.inc.php");
+	
 	class DataFX
 	{
 		public static $Errors;
