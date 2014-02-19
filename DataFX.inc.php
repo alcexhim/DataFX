@@ -2,7 +2,9 @@
 	namespace DataFX;
 	use WebFX\System;
 	
-	\Enum::Create("DataFX\\ColumnValue", "Now", "Today", "Undefined");
+	\Enum::Create("DataFX\\ColumnValue", "Undefined", "Now", "Today", "CurrentTimestamp");
+	
+	require_once("DataObject.inc.php");
 	
 	class DataFX
 	{

@@ -7,12 +7,16 @@
 		public $Name;
 		public $ColumnPrefix;
 		public $Columns;
+		public $Records;
 		
-		public function __construct($name, $columnPrefix, $columns)
+		public function __construct($name, $columnPrefix, $columns, $records = null)
 		{
 			$this->Name = $name;
 			$this->ColumnPrefix = $columnPrefix;
 			$this->Columns = $columns;
+			
+			if ($records == null) $records = array();
+			$this->Records = $records;
 		}
 		
 		public static function Get($name, $columnPrefix = null)
@@ -61,13 +65,29 @@
 				{
 					$query .= "(" . $column->Size . ")";
 				}
-				if ($column->DefaultValue != null)
-				{
-					$query .= " DEFAULT " . $column->DefaultValue;
-				}
 				if ($column->AllowNull == false)
 				{
 					$query .= " NOT NULL";
+				}
+				if ($column->DefaultValue != null)
+				{
+					$query .= " DEFAULT ";
+					if ($column->DefaultValue === ColumnValue::Undefined)
+					{
+						$query .= "NULL";
+					}
+					else if ($column->DefaultValue === ColumnValue::CurrentTimestamp)
+					{
+						$query .= "CURRENT_TIMESTAMP";
+					}
+					else if (is_string($column->DefaultValue))
+					{
+						$query .= "\"" . $column->DefaultValue . "\"";
+					}
+					else
+					{
+						$query .= $column->DefaultValue;
+					}
 				}
 				if ($column->PrimaryKey)
 				{
@@ -80,7 +100,6 @@
 				if ($i < $count - 1) $query .= ", ";
 			}
 			$query .= ")";
-			echo($query);
 			
 			$result = $MySQL->query($query);
 			if ($result === false)
@@ -89,6 +108,10 @@
 				DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
 				return false;
 			}
+			
+			$result = $this->Insert($this->Records);
+			if ($result == null) return false;
+			
 			return true;
 		}
 		public function Insert($records, $stopOnError = true)
@@ -114,6 +137,10 @@
 					if ($column->Value === ColumnValue::Now)
 					{
 						$query .= "NOW()";
+					}
+					else if ($column->DefaultValue === ColumnValue::CurrentTimestamp)
+					{
+						$query .= "CURRENT_TIMESTAMP";
 					}
 					else if ($column->Value === ColumnValue::Today)
 					{
