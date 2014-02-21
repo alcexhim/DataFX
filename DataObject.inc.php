@@ -93,9 +93,16 @@
 			$classDeclaration .= "\t}\n";
 			
 			$classDeclaration .= "}";
+<<<<<<< HEAD
 
 			// Create the class for this enumeration
 			eval($classDeclaration);
+=======
+			echo($classDeclaration);
+
+			// Create the class for this enumeration
+			// eval($classDeclaration);
+>>>>>>> 8f1dd8cc4ab7c927017363ad4326b32bf859f48b
 		}
 		
 	}
