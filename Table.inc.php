@@ -9,20 +9,13 @@
 		public $Columns;
 		public $Records;
 		
-<<<<<<< HEAD
 		public function __construct($name, $columnPrefix, $columns, $records = null)
-=======
-		public function __construct($name, $columnPrefix, $columns, $records)
->>>>>>> 8f1dd8cc4ab7c927017363ad4326b32bf859f48b
 		{
 			$this->Name = $name;
 			$this->ColumnPrefix = $columnPrefix;
 			$this->Columns = $columns;
-<<<<<<< HEAD
 			
 			if ($records == null) $records = array();
-=======
->>>>>>> 8f1dd8cc4ab7c927017363ad4326b32bf859f48b
 			$this->Records = $records;
 		}
 		
