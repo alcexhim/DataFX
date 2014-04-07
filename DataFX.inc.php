@@ -36,6 +36,7 @@
 			require_once("Record.inc.php");
 			require_once("RecordColumn.inc.php");
 			require_once("Table.inc.php");
+			require_once("TableKey.inc.php");
 			return true;
 		}
 	}

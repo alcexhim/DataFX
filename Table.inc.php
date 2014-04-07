@@ -9,6 +9,9 @@
 		public $Columns;
 		public $Records;
 		
+		public $PrimaryKey;
+		public $UniqueKeys;
+		
 		public function __construct($name, $columnPrefix, $columns, $records = null)
 		{
 			$this->Name = $name;
@@ -109,6 +112,53 @@
 				return false;
 			}
 			
+			if ($this->PrimaryKey != null)
+			{
+				$query = "ALTER TABLE `" . System::$Configuration["Database.TablePrefix"] . $this->Name . "` ADD PRIMARY KEY (";
+				$count = count($key->Columns);
+				for ($i = 0; $i < $count; $i++)
+				{
+					$col = $key->Columns[$i];
+					$query .= "`" . $this->ColumnPrefix . $col->Name . "`";
+					if ($i < $count - 1)
+					{
+						$query .= ", ";
+					}
+				}
+				$query .= ");";
+
+				$result = $MySQL->query($query);
+				if ($result === false)
+				{
+					DataFX::$Errors->Clear();
+					DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
+					return false;
+				}
+			}
+			foreach ($this->UniqueKeys as $key)
+			{
+				$query = "ALTER TABLE `" . System::$Configuration["Database.TablePrefix"] . $this->Name . "` ADD UNIQUE (";
+				$count = count($key->Columns);
+				for ($i = 0; $i < $count; $i++)
+				{
+					$col = $key->Columns[$i];
+					$query .= "`" . $this->ColumnPrefix . $col->Name . "`";
+					if ($i < $count - 1)
+					{
+						$query .= ", ";
+					}
+				}
+				$query .= ");";
+
+				$result = $MySQL->query($query);
+				if ($result === false)
+				{
+					DataFX::$Errors->Clear();
+					DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
+					return false;
+				}
+			}
+				
 			$result = $this->Insert($this->Records);
 			if ($result == null) return false;
 			
