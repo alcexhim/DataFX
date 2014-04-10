@@ -12,6 +12,10 @@
 			{
 				$this->Columns = $columns;
 			}
+			else
+			{
+				$this->Columns = array();
+			}
 		}
 	}
 	class TableKeyColumn
