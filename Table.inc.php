@@ -113,7 +113,8 @@
 			}
 			
 			if ($this->PrimaryKey != null)
-			{
+			{	
+				$key = $this->PrimaryKey;
 				$query = "ALTER TABLE `" . System::$Configuration["Database.TablePrefix"] . $this->Name . "` ADD PRIMARY KEY (";
 				$count = count($key->Columns);
 				for ($i = 0; $i < $count; $i++)
@@ -148,8 +149,8 @@
 						$query .= ", ";
 					}
 				}
-				$query .= ");";
-
+				$query .= ")";
+				
 				$result = $MySQL->query($query);
 				if ($result === false)
 				{
