@@ -6,8 +6,6 @@
 	
 	require_once("DataObject.inc.php");
 	
-	require_once("DataObject.inc.php");
-	
 	class DataFX
 	{
 		public static $Errors;
