@@ -108,7 +108,7 @@
 			if ($result === false)
 			{
 				DataFX::$Errors->Clear();
-				DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
+				DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error, $query));
 				return false;
 			}
 			
@@ -132,7 +132,7 @@
 				if ($result === false)
 				{
 					DataFX::$Errors->Clear();
-					DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
+					DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error, $query));
 					return false;
 				}
 			}
@@ -155,7 +155,7 @@
 				if ($result === false)
 				{
 					DataFX::$Errors->Clear();
-					DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
+					DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error, $query));
 					return false;
 				}
 			}
@@ -185,7 +185,11 @@
 				for ($i = 0; $i < $count; $i++)
 				{
 					$column = $record->Columns[$i];
-					if ($column->Value === ColumnValue::Now)
+					if ($column->Value === null || $column->Value === ColumnValue::Undefined)
+					{
+						$query .= "NULL";
+					}
+					else if ($column->Value === ColumnValue::Now)
 					{
 						$query .= "NOW()";
 					}
@@ -196,10 +200,6 @@
 					else if ($column->Value === ColumnValue::Today)
 					{
 						$query .= "TODAY()";
-					}
-					else if ($column->Value === ColumnValue::Undefined)
-					{
-						$query .= "NULL";
 					}
 					else if (gettype($column->Value) == "string")
 					{
@@ -241,7 +241,7 @@
 			if ($result === false)
 			{
 				DataFX::$Errors->Clear();
-				DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error));
+				DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error, $query));
 				return false;
 			}
 		}
