@@ -196,7 +196,7 @@
 					{
 						$query .= "NOW()";
 					}
-					else if ($column->DefaultValue === ColumnValue::CurrentTimestamp)
+					else if ($column->Value === ColumnValue::CurrentTimestamp)
 					{
 						$query .= "CURRENT_TIMESTAMP";
 					}
