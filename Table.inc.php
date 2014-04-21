@@ -20,6 +20,9 @@
 			
 			if ($records == null) $records = array();
 			$this->Records = $records;
+			
+			$this->PrimaryKey = null;
+			$this->UniqueKeys = array();
 		}
 		
 		public static function Get($name, $columnPrefix = null)
