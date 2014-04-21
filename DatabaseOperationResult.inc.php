@@ -7,7 +7,7 @@
 		
 		public function __construct($affectedRowCount)
 		{
-			$this->InsertedRowCount = $insertedRowCount;
+			$this->AffectedRowCount = $affectedRowCount;
 		}
 	}
 	class InsertResult extends DatabaseOperationResult
