@@ -11,6 +11,7 @@
 		
 		public $PrimaryKey;
 		public $UniqueKeys;
+		public $ForeignKeys;
 		
 		public function __construct($name, $columnPrefix, $columns, $records = null)
 		{
@@ -23,6 +24,7 @@
 			
 			$this->PrimaryKey = null;
 			$this->UniqueKeys = array();
+			$this->ForeignKeys = array();
 		}
 		
 		public static function Get($name, $columnPrefix = null)
@@ -105,6 +107,68 @@
 				}
 				if ($i < $count - 1) $query .= ", ";
 			}
+			
+			$count = count($this->ForeignKeys);
+			if ($count > 0)
+			{
+				$query .= ", ";
+				for ($i = 0; $i < $count; $i++)
+				{
+					$fk = $this->ForeignKeys[$i];
+					$query .= "FOREIGN KEY ";
+					if ($fk->ID != null)
+					{
+						$query .= $fk->ID . " ";
+					}
+					$query .= "(" . $fk->ColumnName . ")";
+					$query .= " REFERENCES " . $fk->ForeignColumnReference->TableName . " (" . $fk->ForeignColumnReference->ColumnName . ")";
+					
+					$query .= " ON DELETE ";
+					switch ($fk->DeleteAction)
+					{
+						case TableForeignKeyReferenceOption::Restrict:
+						{
+							$query .= "RESTRICT";
+						}
+						case TableForeignKeyReferenceOption::Cascade:
+						{
+							$query .= "CASCADE";
+						}
+						case TableForeignKeyReferenceOption::SetNull:
+						{
+							$query .= "SET NULL";
+						}
+						case TableForeignKeyReferenceOption::NoAction:
+						{
+							$query .= "NO ACTION";
+						}
+					}
+					
+					$query .= " ON UPDATE ";
+					switch ($fk->DeleteAction)
+					{
+						case TableForeignKeyReferenceOption::Restrict:
+						{
+							$query .= "RESTRICT";
+						}
+						case TableForeignKeyReferenceOption::Cascade:
+						{
+							$query .= "CASCADE";
+						}
+						case TableForeignKeyReferenceOption::SetNull:
+						{
+							$query .= "SET NULL";
+						}
+						case TableForeignKeyReferenceOption::NoAction:
+						{
+							$query .= "NO ACTION";
+						}
+					}
+					
+					if ($i < $count - 1) $query .= ", ";
+				}
+			}
+			
 			$query .= ")";
 			
 			$result = $MySQL->query($query);
