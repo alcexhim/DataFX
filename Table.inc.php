@@ -120,8 +120,8 @@
 					{
 						$query .= $fk->ID . " ";
 					}
-					$query .= "(" . $fk->ColumnName . ")";
-					$query .= " REFERENCES " . $fk->ForeignColumnReference->TableName . " (" . $fk->ForeignColumnReference->ColumnName . ")";
+					$query .= "(" . $this->ColumnPrefix . $fk->ColumnName . ")";
+					$query .= " REFERENCES " . System::GetConfigurationValue("Database.TablePrefix") . $fk->ForeignColumnReference->Table->Name . " (" . $fk->ForeignColumnReference->Table->ColumnPrefix . $fk->ForeignColumnReference->Column->Name . ")";
 					
 					$query .= " ON DELETE ";
 					switch ($fk->DeleteAction)
@@ -129,18 +129,22 @@
 						case TableForeignKeyReferenceOption::Restrict:
 						{
 							$query .= "RESTRICT";
+							break;
 						}
 						case TableForeignKeyReferenceOption::Cascade:
 						{
 							$query .= "CASCADE";
+							break;
 						}
 						case TableForeignKeyReferenceOption::SetNull:
 						{
 							$query .= "SET NULL";
+							break;
 						}
 						case TableForeignKeyReferenceOption::NoAction:
 						{
 							$query .= "NO ACTION";
+							break;
 						}
 					}
 					
@@ -150,18 +154,22 @@
 						case TableForeignKeyReferenceOption::Restrict:
 						{
 							$query .= "RESTRICT";
+							break;
 						}
 						case TableForeignKeyReferenceOption::Cascade:
 						{
 							$query .= "CASCADE";
+							break;
 						}
 						case TableForeignKeyReferenceOption::SetNull:
 						{
 							$query .= "SET NULL";
+							break;
 						}
 						case TableForeignKeyReferenceOption::NoAction:
 						{
 							$query .= "NO ACTION";
+							break;
 						}
 					}
 					
@@ -322,6 +330,15 @@
 				return ($result->num_rows > 0);
 			}
 			return false;
+		}
+		
+		public function GetColumnByName($name)
+		{
+			foreach ($this->Columns as $column)
+			{
+				if ($column->Name == $name) return $column;
+			}
+			return null;
 		}
 	}
 ?>

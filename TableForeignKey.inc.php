@@ -25,13 +25,17 @@
 	}
 	class TableForeignKeyColumn
 	{
-		public $TableName;
-		public $ColumnName;
+		public $Table;
+		public $Column;
 		
-		public function __construct($tableName, $columnName)
+		public function __construct($table, $column)
 		{
-			$this->TableName = $tableName;
-			$this->ColumnName = $columnName;
+			$this->Table = $table;
+			if (is_string($column))
+			{
+				$column = $table->GetColumnByName($column);
+			}
+			$this->Column = $column;
 		}
 	}
 ?>
