@@ -2,17 +2,60 @@
 	namespace DataFX;
 	
 	use WebFX\System;
+	
+	/**
+	 * Represents a table on the database.
+	 * @author Michael Becker
+	 * @see Column
+	 * @see Record
+	 * @see TableForeignKey
+	 */
 	class Table
 	{
+		/**
+		 * The name of the table.
+		 * @var string
+		 */
 		public $Name;
+		/**
+		 * The prefix used before the name of each column in the table.
+		 * @var string
+		 */
 		public $ColumnPrefix;
+		/**
+		 * The columns on the table.
+		 * @var Column[]
+		 */
 		public $Columns;
+		/**
+		 * The records in the table.
+		 * @var Record[]
+		 */
 		public $Records;
 		
+		/**
+		 * The key that is the primary key of the table.
+		 * @var TableForeignKey
+		 */
 		public $PrimaryKey;
+		/**
+		 * The key(s) that are the unique keys of the table.
+		 * @var TableForeignKey[]
+		 */
 		public $UniqueKeys;
+		/**
+		 * Any additional key(s) on the table that are not primary or unique keys.
+		 * @var TableForeignKey[]
+		 */
 		public $ForeignKeys;
 		
+		/**
+		 * Creates a Table object with the given parameters (but does not create the table on the database).
+		 * @param string $name The name of the table.
+		 * @param string $columnPrefix The prefix used before the name of each column in the table.
+		 * @param Column[] $columns The column(s) of the table.
+		 * @param Record[] $records The record(s) to insert into the table.
+		 */
 		public function __construct($name, $columnPrefix, $columns, $records = null)
 		{
 			$this->Name = $name;
@@ -27,6 +70,12 @@
 			$this->ForeignKeys = array();
 		}
 		
+		/**
+		 * Gets the table with the specified name from the database.
+		 * @param string $name The name of the table to search for.
+		 * @param string $columnPrefix The column prefix for the columns in the table. Columns that begin with this prefix will be populated with the prefix stripped.
+		 * @return Table The table with the specified name.
+		 */
 		public static function Get($name, $columnPrefix = null)
 		{
 			global $MySQL;
@@ -58,6 +107,10 @@
 			return new Table($name, $columnPrefix, $columns);
 		}
 		
+		/**
+		 * Creates the table on the database.
+		 * @return boolean True if the table was created successfully; false if an error occurred.
+		 */
 		public function Create()
 		{
 			global $MySQL;
@@ -240,6 +293,13 @@
 			
 			return true;
 		}
+		
+		/**
+		 * 
+		 * @param Record[] $records The record(s) to insert into the table.
+		 * @param boolean $stopOnError True if processing of the records should stop if an error occurs; false to continue.
+		 * @return NULL|InsertResult
+		 */
 		public function Insert($records, $stopOnError = true)
 		{
 			DataFX::$Errors->Clear();
@@ -308,6 +368,11 @@
 			}
 			return new InsertResult($MySQL->affected_rows, $MySQL->insert_id);
 		}
+		
+		/**
+		 * Deletes this table from the database.
+		 * @return boolean True if the table was deleted successfully; false otherwise.
+		 */
 		public function Delete()
 		{
 			global $MySQL;
@@ -320,6 +385,11 @@
 				return false;
 			}
 		}
+		
+		/**
+		 * Determines if this table exists on the database.
+		 * @return boolean True if this table exists; false otherwise.
+		 */
 		public function Exists()
 		{
 			global $MySQL;
@@ -332,6 +402,11 @@
 			return false;
 		}
 		
+		/**
+		 * Retrieves the Column with the given name on this Table.
+		 * @param string $name The name of the column to search for.
+		 * @return Column|NULL The column with the given name, or NULL if no columns with the given name were found.
+		 */
 		public function GetColumnByName($name)
 		{
 			foreach ($this->Columns as $column)
