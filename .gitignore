@@ -1,0 +1,6 @@
+# ignore Eclipse IDE stuff
+.buildpath
+.project
+.settings
+.metadata
+RemoteSystemsTempFiles
