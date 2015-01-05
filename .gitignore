@@ -1,3 +1,5 @@
+# Eclipse stuff
 .buildpath
+.metadata
 .project
 .settings
