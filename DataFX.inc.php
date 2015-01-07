@@ -11,8 +11,7 @@
 		public static $Errors;
 		
 		/**
-		 * Returns the currently-loaded PDO engine. Efforts are being made to move from MySQLi to PDO but have not
-		 * been finished completely just yet.
+		 * Returns the currently-loaded PDO engine. Efforts are being made to move from MySQLi to PDO but have not been finished completely just yet.
 		 * @return \PDO The currently-loaded PDO engine.
 		 */
 		public static function GetPDO()
