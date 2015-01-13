@@ -35,7 +35,7 @@
 		
 		/**
 		 * The key that is the primary key of the table.
-		 * @var TableForeignKey
+		 * @var TableKey
 		 */
 		public $PrimaryKey;
 		/**
@@ -235,6 +235,8 @@
 			$result = $MySQL->query($query);
 			if ($result === false)
 			{
+				trigger_error("DataFX error: " . $MySQL->errno . ": " . $MySQL->error);
+				trigger_error("DataFX query: " . $query);
 				DataFX::$Errors->Clear();
 				DataFX::$Errors->Add(new DataFXError($MySQL->errno, $MySQL->error, $query));
 				return false;
